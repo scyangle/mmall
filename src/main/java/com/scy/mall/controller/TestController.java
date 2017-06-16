@@ -19,4 +19,8 @@ public class TestController {
         }
         return strB.toString();
     }
+
+    public String StringTest(String arr) {
+        return arr.toString();
+    }
 }
