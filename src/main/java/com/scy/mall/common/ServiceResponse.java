@@ -29,4 +29,7 @@ public class ServiceResponse<T> implements Serializable {
         this.msg = msg;
         this.data = data;
     }
+    public boolean isSuccess() {
+        return this.status==ResponseCode.SUCCESS.getCode();
+  2  }
 }
