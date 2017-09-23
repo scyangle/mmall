@@ -35,17 +35,17 @@ public class ServerResponse<T> implements Serializable {
         return this.status == ResponseCode.SUCCESS.getCode();
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public T getData() {
-        return data;
-    }
+//    public int getStatus() {
+//        return status;
+//    }
+//
+//    public String getMsg() {
+//        return msg;
+//    }
+//
+//    public T getData() {
+//        return data;
+//    }
 
     public static <T> ServerResponse<T> createBySuccess() {
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode());
