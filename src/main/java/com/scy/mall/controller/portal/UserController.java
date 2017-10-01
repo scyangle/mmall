@@ -1,5 +1,6 @@
 package com.scy.mall.controller.portal;
 
+import com.scy.mall.common.Const;
 import com.scy.mall.common.ServerResponse;
 import com.scy.mall.pojo.User;
 import com.scy.mall.service.IUserService;
@@ -18,11 +19,14 @@ import javax.servlet.http.HttpSession;
 @RequestMapping(value = "/user/")
 public class UserController {
     @Autowired
-    private IUserService userService;
+    private IUserService iUserService;
     @RequestMapping("login.do")
     @ResponseBody
     public Object login(@RequestParam(required = true) String username, String password, HttpSession session) {
-        ServerResponse<User> response = userService.login(username, password);
+        ServerResponse<User> response = iUserService.login(username, password);
+        if (response.isSuccess()) {
+            session.setAttribute(Const.CURRENT_USER, response.getData());
+        }
         return response;
     }
 }
