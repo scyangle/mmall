@@ -41,5 +41,6 @@ public class UserServiceImpl implements IUserService{
             return ServerResponse.createByErrorMessage("邮箱已注册");
         }
         user.setRole(Const.Role.ROLE_CUSTOMER);
+        return null;
     }
 }
