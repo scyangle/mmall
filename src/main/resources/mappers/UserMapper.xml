@@ -154,10 +154,15 @@
     <select id="checkUserName" parameterType="String" resultType="int">
       SELECT count(1) from  mmall_user WHERE username=#{username}
   </select>
+    <select id="checkEmail" parameterType="String" resultType="int">
+        select count(1) from mmall_user where email=#{email}
+    </select>
     <select id="selectLogin" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM mmall_user WHERE  username=#(username) and password=#{password}
+        FROM mmall_user
+        WHERE  username=#{username} and password=#{password}
     </select>
+
 
 </mapper>

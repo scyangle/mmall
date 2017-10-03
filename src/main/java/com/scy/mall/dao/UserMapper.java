@@ -1,6 +1,7 @@
 package com.scy.mall.dao;
 
 import com.scy.mall.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -17,6 +18,9 @@ public interface UserMapper {
 
     int checkUserName(String username);
 
-    User selectLogin(String username, String password);
+    int checkEmail(String email);
+
+    User selectLogin(@Param("username") String username, @Param("password") String password);
+
 
 }

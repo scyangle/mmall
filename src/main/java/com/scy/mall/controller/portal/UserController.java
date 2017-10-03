@@ -29,4 +29,10 @@ public class UserController {
         }
         return response;
     }
+    @RequestMapping("logout.do")
+    @ResponseBody
+    public ServerResponse<String> logout(HttpSession session) {
+        session.removeAttribute(Const.CURRENT_USER);
+        return ServerResponse.createBySuccess("退出登录");
+    }
 }

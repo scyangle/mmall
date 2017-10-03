@@ -50,4 +50,5 @@
         <!--# 检查连接有效性的SQL语句-->
         <property name="validationQuery" value="SELECT 1 FROM dual"/>
     </bean>
+
 </beans>
