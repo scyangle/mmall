@@ -35,4 +35,10 @@ public class UserController {
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess("退出登录");
     }
+
+    @RequestMapping("register.do")
+    @ResponseBody
+    public ServerResponse<String> register(User user) {
+       return iUserService.register(user);
+    }
 }

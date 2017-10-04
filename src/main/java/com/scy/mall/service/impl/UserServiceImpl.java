@@ -5,6 +5,7 @@ import com.scy.mall.common.ServerResponse;
 import com.scy.mall.dao.UserMapper;
 import com.scy.mall.pojo.User;
 import com.scy.mall.service.IUserService;
+import com.scy.mall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements IUserService{
         if (count != 1) {
             return ServerResponse.createByErrorMessage("用户名不存在");
         }
-        //todo 密码登录MD5F
+        password = MD5Util.MD5EncodeUtf8(password);
         User user = userMapper.selectLogin(username, password);
         if (user == null) {
             return ServerResponse.createByErrorMessage("密码错误");
@@ -41,6 +42,31 @@ public class UserServiceImpl implements IUserService{
             return ServerResponse.createByErrorMessage("邮箱已注册");
         }
         user.setRole(Const.Role.ROLE_CUSTOMER);
-        return null;
+        user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
+        int resultCount = userMapper.insert(user);
+        if (resultCount == 0) {
+            return ServerResponse.createByErrorMessage("注册失败");
+        }
+        return ServerResponse.createBySuccess("注册成功");
+    }
+
+    public ServerResponse<String> checkValid(String str, String type) {
+        if (StringUtils.isNoneBlank(type)) {
+            if (Const.USERNAME.equals(type)) {
+                int count = userMapper.checkUserName(str);
+                if (count > 0) {
+                    return ServerResponse.createByErrorMessage("用户名已存在");
+                }
+            }
+            if (Const.EMAIL.equals(type)) {
+                int count = userMapper.checkEmail(str);
+                if (count > 0) {
+                    return ServerResponse.createByErrorMessage("邮箱已注册");
+                }
+            }
+        }else{
+            return ServerResponse.createByErrorMessage("参数错误");
+        }
+        return ServerResponse.createBySuccess("校验成功");
     }
 }
