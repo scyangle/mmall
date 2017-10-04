@@ -33,13 +33,13 @@ public class UserServiceImpl implements IUserService{
     }
 
     public ServerResponse<String> register(User user) {
-        int count = userMapper.checkUserName(user.getUsername());
-        if (count > 0) {
-            return ServerResponse.createByErrorMessage("用户名已存在");
+        ServerResponse<String> vaildServerResponse = this.checkValid(user.getUsername(), Const.USERNAME);
+        if (!vaildServerResponse.isSuccess()) {
+            return vaildServerResponse;
         }
-        count = userMapper.checkEmail(user.getEmail());
-        if (count > 0) {
-            return ServerResponse.createByErrorMessage("邮箱已注册");
+        vaildServerResponse = this.checkValid(user.getUsername(), Const.EMAIL);
+        if (!vaildServerResponse.isSuccess()) {
+            return vaildServerResponse;
         }
         user.setRole(Const.Role.ROLE_CUSTOMER);
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
