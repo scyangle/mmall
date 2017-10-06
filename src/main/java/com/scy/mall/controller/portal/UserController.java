@@ -6,6 +6,7 @@ import com.scy.mall.pojo.User;
 import com.scy.mall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,5 +57,17 @@ public class UserController {
             return ServerResponse.createBySuccess(user);
         }
         return ServerResponse.createByErrorMessage("用户未登录，无法获取用户当前信息");
+    }
+
+    @RequestMapping("forget_get_question.do")
+    @ResponseBody
+    public ServerResponse<String> forgetGetQuestion(String username) {
+        return iUserService.selectQuestion(username);
+    }
+
+    @RequestMapping("forget_check_answer.do")
+    @ResponseBody
+    public ServerResponse<String> forgetCheckAnswer(String username,String question,String answer) {
+        return iUserService.forgetCheckAnswer(username, question, answer);
     }
 }

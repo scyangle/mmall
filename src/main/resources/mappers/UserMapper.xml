@@ -138,6 +138,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="com.scy.mall.pojo.User">
     update mmall_user
     set username = #{username,jdbcType=VARCHAR},
@@ -151,17 +152,32 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
     <select id="checkUserName" parameterType="String" resultType="int">
       SELECT count(1) from  mmall_user WHERE username=#{username}
   </select>
+
     <select id="checkEmail" parameterType="String" resultType="int">
         select count(1) from mmall_user where email=#{email}
     </select>
+
     <select id="selectLogin" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM mmall_user
-        WHERE  username=#{username} and password=#{password}
+        WHERE username=#{username} and password=#{password}
+    </select>
+
+    <select id="selectQuestionByName" parameterType="String" resultType="String">
+        SELECT  question from mmall_user  where username=#{username}
+    </select>
+
+    <select id="checkAmswer" parameterType="map" resultType="int">
+        SELECT count(1)
+        from mmall_user
+        WHERE  username=#{username}
+        and question=#{question}
+        and answer=#{answer}
     </select>
 
 
