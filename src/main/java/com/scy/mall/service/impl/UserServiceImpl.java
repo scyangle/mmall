@@ -96,4 +96,29 @@ public class UserServiceImpl implements IUserService{
         }
         return ServerResponse.createByErrorMessage("问题的答案错误");
     }
+
+    @Override
+    public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
+        if (StringUtils.isBlank(forgetToken)) {
+            return ServerResponse.createByErrorMessage("参数错误，token需要传递");
+        }
+        ServerResponse<String> valid = this.checkValid(username, Const.USERNAME);
+        if (!valid.isSuccess()) {
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+        String token = TokenCache.getKey("token_" + username);
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMessage("token无效或者过期");
+        }
+        if (StringUtils.equals(token, forgetToken)) {
+            String md5Password = MD5Util.MD5EncodeUtf8(passwordNew);
+            int rowcount=userMapper.updatePasswordByUsername(username, md5Password);
+            if (rowcount > 0) {
+                return ServerResponse.createBySuccess("修改密码成功");
+            }
+        }else{
+            return ServerResponse.createByErrorMessage("token错误，请重新获取重置密码的token");
+        }
+        return ServerResponse.createByErrorMessage("修改密码失败");
+    }
 }
