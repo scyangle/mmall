@@ -6,10 +6,7 @@ import com.scy.mall.pojo.User;
 import com.scy.mall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -75,5 +72,30 @@ public class UserController {
     @ResponseBody
     public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
         return iUserService.forgetResetPassword(username, passwordNew, forgetToken);
+    }
+
+    @RequestMapping(value = "reset_password.do")
+    @ResponseBody
+    public ServerResponse<String> resetPassword(HttpSession session, String passwordNew, String passwordOld) {
+        User currentUser =(User)session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return iUserService.resetPassword(passwordOld, passwordNew, currentUser);
+    }
+
+    public ServerResponse<User> updateInformation(User user, HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (null == currentUser) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        user.setId(currentUser.getId());
+        user.setUsername(currentUser.getUsername());
+        ServerResponse<User> userServerResponse = iUserService.updateInformation(user);
+        if (userServerResponse.isSuccess()) {
+            userServerResponse.getData().setUsername(currentUser.getUsername());
+            session.setAttribute(Const.CURRENT_USER,userServerResponse.getData());
+        }
+        return userServerResponse;
     }
 }
