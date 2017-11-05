@@ -107,7 +107,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("参数错误，token需要传递");
         }
         ServerResponse<String> valid = this.checkValid(username, Const.USERNAME);
-        if (!valid.isSuccess()) {
+        if (valid.isSuccess()) {  //校验成功证明用户名不存在
             return ServerResponse.createByErrorMessage("用户不存在");
         }
         String token = TokenCache.getKey("token_" + username);
