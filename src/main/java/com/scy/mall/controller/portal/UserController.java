@@ -1,6 +1,7 @@
 package com.scy.mall.controller.portal;
 
 import com.scy.mall.common.Const;
+import com.scy.mall.common.ResponseCode;
 import com.scy.mall.common.ServerResponse;
 import com.scy.mall.pojo.User;
 import com.scy.mall.service.IUserService;
@@ -84,6 +85,8 @@ public class UserController {
         return iUserService.resetPassword(passwordOld, passwordNew, currentUser);
     }
 
+    @RequestMapping(value = "update_information.do")
+    @ResponseBody
     public ServerResponse<User> updateInformation(User user, HttpSession session) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (null == currentUser) {
@@ -97,5 +100,15 @@ public class UserController {
             session.setAttribute(Const.CURRENT_USER,userServerResponse.getData());
         }
         return userServerResponse;
+    }
+
+    @RequestMapping(value = "get_information.do")
+    @ResponseBody
+    public ServerResponse<User> getInfomation(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，需要强制登录status=10");
+        }
+        return iUserService.getInformation(currentUser.getId());
     }
 }
