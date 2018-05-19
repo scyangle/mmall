@@ -2,6 +2,8 @@ package com.scy.mall.dao;
 
 import com.scy.mall.pojo.Category;
 
+import java.util.List;
+
 public interface CategoryMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,8 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
+
+    List<Category> selectCategoryChildrenByParentId(Integer parentId);
+
+    List<Category> selectCategoryAndChildrenById(Integer categoryId);
 }
